@@ -116,10 +116,10 @@ def test_explain_names_the_layer_a_value_came_from(project: Path) -> None:
 
 
 def test_effective_value_names_its_source_layer(project: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Load-bearing (#5110): winning layer is named, and the losing layer stays in the chain.
+    """Regression test from #5110: name the winner and retain the loser in ``chain``.
 
-    Collapsing the chain to a single value would still report the winner and
-    silently drop the question "what else defined this key".
+    This records the required output contract. It also passes against the
+    previous per-key resolution path by design.
     """
     monkeypatch.setenv("BERNSTEIN_CLI", "gemini")
 
