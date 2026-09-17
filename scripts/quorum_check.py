@@ -470,11 +470,10 @@ def annotation(verdict: Verdict) -> str:
     """
     unmet = [req for req in verdict.requirements if not req.met]
     if not unmet:
-        return verdict.title or "unknown"
+        return verdict.title
     first = unmet[0]
     rest = f" (+{len(unmet) - 1} more in the job summary)" if len(unmet) > 1 else ""
-    result = f"waiting for: {first.text} - {first.who}{rest}".replace("`", "")
-    return result or "waiting for: unknown reason"
+    return f"waiting for: {first.text} - {first.who}{rest}".replace("`", "")
 
 
 def pr_number_from_env(env: dict[str, str]) -> int | None:
