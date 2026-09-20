@@ -405,8 +405,7 @@ def evaluate(pr: PullRequest, roster: Roster, owners: list[tuple[str, list[str]]
         sensitive = sorted(
             p
             for p in pr.paths
-            if not p.startswith(SENSITIVE_EXEMPT_PREFIXES)
-            and any(word in p for word in SENSITIVE_WORDS)
+            if not p.startswith(SENSITIVE_EXEMPT_PREFIXES) and any(word in p for word in SENSITIVE_WORDS)
         )
         large = pr.changed_lines > THIRD_APPROVAL_LINES
         need_total, need_core = (3, 2) if (large or sensitive) else (2, 1)
@@ -471,10 +470,11 @@ def annotation(verdict: Verdict) -> str:
     """
     unmet = [req for req in verdict.requirements if not req.met]
     if not unmet:
-        return verdict.title
+        return verdict.title or "unknown"
     first = unmet[0]
     rest = f" (+{len(unmet) - 1} more in the job summary)" if len(unmet) > 1 else ""
-    return f"waiting for: {first.text} - {first.who}{rest}".replace("`", "")
+    result = f"waiting for: {first.text} - {first.who}{rest}".replace("`", "")
+    return result or "waiting for: unknown reason"
 
 
 def pr_number_from_env(env: dict[str, str]) -> int | None:
